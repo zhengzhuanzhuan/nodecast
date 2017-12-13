@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.css">
+</head>
+
+<body>
+  {{include '../_includes/header.html'}}
+  <section class="container">
+  <div class="row">
+    <div class="col-md-5">
+      {{ if !user }}
+      <div class="alert alert-danger" role="alert">未登录不允许操作。</div>
+      {{ else if !topic }}
+      <div class="alert alert-danger" role="alert">该话题已不存在。</div>
+      {{ else if topic.userId !== user.id }}
+      <div class="alert alert-danger" role="alert">您没有权限操作该话题。</div>
+      {{ else }}
+      <form id="topic_new_form">
+        <div class="form-group">
+          <label for="categoryId">选择板块</label>
+          <select class="form-control" name="categoryId" id="categoryId">
+            {{ each categories }}
+            {{ if topic.categoryId === $value.id }}
+            <option selected value="{{ $value.id }}">{{ $value.name }}</option>
+            {{ else }}
+            <option value="{{ $value.id }}">{{ $value.name }}</option>
+            {{ /if }}
+            {{ /each }}
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="title">标题</label>
+          <input type="text" class="form-control" id="title" name="title" value="{{ topic.title }}">
+        </div>
+        <div class="form-group">
+          <label for="content">内容</label>
+          <textarea class="form-control" id="content" name="content" rows="10">{{ topic.content }}</textarea>
+        </div>
+        <button type="submit" class="btn btn-default">Submit</button>
+      </form>
+      {{ /if }}
+    </div>
+  </div>
+</section>
+  {{include '../_includes/footer.html'}}
+  <script src="/node_modules/jquery/dist/jquery.js"></script>
+  <script src="/node_modules/bootstrap/dist/js/bootstrap.js"></script>
+</body>
+
+</html>
